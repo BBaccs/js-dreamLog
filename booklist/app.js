@@ -52,7 +52,7 @@ UI.prototype.validationAlert = function(className, message){
     if (className === 'lucid') {
         setTimeout(function(){
             container.removeChild(validationAlert);
-       }, 96000);
+       }, 8000);
     } else {
         setTimeout(function(){
             container.removeChild(validationAlert);
