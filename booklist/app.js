@@ -1,5 +1,5 @@
 // Dream Constructor
-function Dream (date, time, log) {
+function Dream (date, time, log) {  
     this.date = date;
     this.time = time;
     this.log = log;
@@ -10,15 +10,13 @@ function Dream (date, time, log) {
 function UI () {}
 
 // UI Add Dream
-UI.prototype.addDreamToList = function(dream){
-    
+UI.prototype.addDreamToList = function(dream){  
     const list = document.getElementById('dream-list'),
     lucidCheck = document.getElementById("Lucid-check"),
     row = document.createElement('tr');
     if (lucidCheck.checked) {
         row.className = 'lucid-log';
     } 
-    
 
     row.innerHTML = `
         <td class="date">${dream.date}</td>
@@ -27,7 +25,6 @@ UI.prototype.addDreamToList = function(dream){
         <td><a href="#" class="delete">X<a></td>
     `;
     list.appendChild(row);
-
 }
 
 // Clear form fields
@@ -41,23 +38,24 @@ UI.prototype.clearFields = function(){
 // Insert Success/Error Div 
 UI.prototype.validationAlert = function(className, message){
     const container = document.getElementById('dream-form'),
-          validationAlert = document.createElement('div');
+        validationAlert = document.createElement('div');
+        validationAlert.className = `
+            ${className}
+        `;
+        validationAlert.innerHTML = `
+            ${message}
+        `;
+        container.insertBefore(validationAlert, container.firstChild);
 
-    validationAlert.className = `${className}`;
-    validationAlert.innerHTML = `
-        ${message}
-    `;
-    container.insertBefore(validationAlert, container.firstChild);
-
-    if (className === 'lucid') {
-        setTimeout(function(){
-            container.removeChild(validationAlert);
-       }, 8000);
-    } else {
-        setTimeout(function(){
-            container.removeChild(validationAlert);
-       }, 3000);
-    }
+        if (className === 'lucid') {
+            setTimeout(function(){
+                container.removeChild(validationAlert);
+            }, 8000);
+        } else {
+            setTimeout(function(){
+                container.removeChild(validationAlert);
+            }, 3000);
+        }
 }
 
 
@@ -82,7 +80,6 @@ UI.prototype.validationAlert = function(className, message){
 
 // Event Listeners
 document.getElementById('dream-form').addEventListener('submit', function(e){
-
     const dateValidation = /[0-9]/,
           date = document.getElementById('Date').value,
           time = document.getElementById('Time').value,
@@ -111,9 +108,8 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
   });
 
   //Delete button Event Listener
-  document.getElementById('dream-list').addEventListener('click', function(e){
-      
-      if (e.target.className === 'delete') {
-          this.removeChild(e.target.parentElement.parentElement);
-      }
+  document.getElementById('dream-list').addEventListener('click', function(e){ 
+    if (e.target.className === 'delete') {
+        this.removeChild(e.target.parentElement.parentElement);
+     }
   });
