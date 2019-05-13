@@ -12,7 +12,7 @@ function UI () {}
 // UI Add Dream
 UI.prototype.addDreamToList = function(dream){  
     const list = document.getElementById('dream-list'),
-    lucidCheck = document.getElementById("Lucid-check"),
+    lucidCheck = document.getElementById('Lucid-check'),
     row = document.createElement('tr');
     if (lucidCheck.checked) {
         row.className = 'lucid-log';
@@ -42,9 +42,7 @@ UI.prototype.validationAlert = function(className, message){
         validationAlert.className = `
             ${className}
         `;
-        validationAlert.innerHTML = `
-            ${message}
-        `;
+        validationAlert.appendChild(document.createTextNode(message));
         container.insertBefore(validationAlert, container.firstChild);
 
         if (className === 'lucid') {
