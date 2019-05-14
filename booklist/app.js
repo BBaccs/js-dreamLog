@@ -9,6 +9,62 @@ function Dream (date, time, log) {
 // UI Constructor
 function UI () {}
 
+
+
+//2nd local storage
+// function Store () {}
+
+// Store.prototype.getStoredDreams = function(){
+//     let dreams;
+//     if (localStorage.getItem('dreams') === null) {
+//         dreams = [];
+//     } else {
+//         dreams = JSON.parse(localStorage.getItem('dreams'));
+//     }
+//     return dreams;
+// }
+// Store.prototype.displayStoredDreams = function(dream){
+//     const store = new Store;
+//     const dreams = store.getStoredDreams();
+//     dreams.forEach(function(dream) {
+//         const ui = new UI;
+//         ui.addDreamToList(dream);
+//     });
+// }
+// Store.prototype.storeDreams = function(dream){
+//     const store = new Store;
+//     const dreams = store.getStoredDreams();
+
+//     dreams.push(dream);
+
+//     localStorage.setItem('dreams', JSON.stringify(dreams));
+// }
+// Store.prototype.removeStoredDreams = function(){
+    
+// }
+
+//first local storafge
+// UI.prototype.setLocalStorage = function(dream){
+        
+//         localStorage.setItem('Jounral Date', `${dream.date}`);
+//         localStorage.setItem('Jounral Time', `${dream.time}`);
+//         localStorage.setItem('Jounral Log', `${dream.log}`);
+
+
+    
+// }
+
+// UI.prototype.getLocalStorage(){
+    
+// }
+
+// UI.prototype.removeLocalStorage = function(){
+//     localStorage.clear();
+// }
+
+
+
+
 // UI Add Dream
 UI.prototype.addDreamToList = function(dream){  
     const list = document.getElementById('dream-list'),
@@ -56,27 +112,17 @@ UI.prototype.validationAlert = function(className, message){
         }
 }
 
+UI.prototype.deleteDream = function(target){
 
-// UI.prototype.setLocalStorage = function(dream){
-        
-//         localStorage.setItem('Jounral Date', `${dream.date}`);
-//         localStorage.setItem('Jounral Time', `${dream.time}`);
-//         localStorage.setItem('Jounral Log', `${dream.log}`);
+    if (target.className === 'delete') {
+        target.parentElement.parentElement.remove();
+     }
+  }
+  
 
+// Event Listener
 
-    
-// }
-
-// UI.prototype.getLocalStorage(){
-    
-// }
-
-// UI.prototype.removeLocalStorage = function(){
-//     localStorage.clear();
-// }
-
-
-// Event Listeners
+//Add dream Event Listener
 document.getElementById('dream-form').addEventListener('submit', function(e){
     const dateValidation = /[0-9]/,
           date = document.getElementById('Date').value,
@@ -85,12 +131,14 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
           lucidCheck = document.getElementById("Lucid-check"),
           dream = new Dream(date, time, log),
           ui = new UI();
+        //   store = new Store();
 
           //Validate then add dream if validation is correct
     if (date === '' || time === '' || log === '') {
         ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
     } else if(dateValidation.test(date)){
         ui.addDreamToList(dream);
+        // store.storeDreams(dream);
         if (lucidCheck.checked) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
             ui.clearFields();
@@ -107,30 +155,8 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
 
   //Delete button Event Listener
   document.getElementById('dream-list').addEventListener('click', function(e){ 
-    if (e.target.className === 'delete') {
-        this.removeChild(e.target.parentElement.parentElement);
-     }
+    const ui = new UI;
+    ui.deleteDream(e.target);
+    ui.validationAlert('success', 'Dream entry removed');
+    e.preventDefault();
   });
-
-
-//   What trav did diffeerently:
-//   // Delete Book
-// UI.prototype.deleteBook = function(target){
-//     if(target.className === 'delete') {
-//       target.parentElement.parentElement.remove();
-//     }
-//   }
-  // Event Listener for delete
-// document.getElementById('book-list').addEventListener('click', function(e){
-
-//     // Instantiate UI
-//     const ui = new UI();
-  
-//     // Delete book
-//     ui.deleteBook(e.target);
-  
-//     // Show message
-//     ui.showAlert('Book Removed!', 'success');
-  
-//     e.preventDefault();
-//   });
