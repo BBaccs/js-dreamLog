@@ -97,7 +97,6 @@ UI.prototype.validationAlert = function(className, message){
 }
 
 UI.prototype.deleteDream = function(target){
-
     if (target.className === 'delete') {
         target.parentElement.parentElement.remove();
      }
@@ -122,15 +121,15 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
         ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
     } else if(dateValidation.test(date)){
         ui.addDreamToList(dream);
-        ui.addLocalDreams();
+        // ui.addLocalDreams();
         if (lucidCheck.checked) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
-            ui.addLocalDreams(dream);
+            // ui.addLocalDreams(dream);
             ui.clearFields();
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
-            ui.getLocalDreams();
-            ui.addLocalDreams(dream);
+            // ui.getLocalDreams();
+            // ui.addLocalDreams(dream);
             ui.clearFields();
         }
         
