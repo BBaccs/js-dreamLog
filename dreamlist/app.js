@@ -10,57 +10,41 @@ function Dream (date, time, log) {
 function UI () {}
 
 
+// //UI Prototypes
+// //Dream Log Local Storage Logic
 
-//2nd local storage
-// function Store () {}
-
-// Store.prototype.getStoredDreams = function(){
+// //Step 1: Check/Get Dreams from LS
+// UI.prototype.getLocalDreams = function(){
 //     let dreams;
-//     if (localStorage.getItem('dreams') === null) {
+//     if (localStorage.getItem('Dream-Dates') === null) {
 //         dreams = [];
 //     } else {
 //         dreams = JSON.parse(localStorage.getItem('dreams'));
 //     }
+//     console.log('dream saved');
 //     return dreams;
 // }
-// Store.prototype.displayStoredDreams = function(dream){
-//     const store = new Store;
-//     const dreams = store.getStoredDreams();
-//     dreams.forEach(function(dream) {
+
+// //Step 2: Display local Dreams
+// UI.prototype.displayLocalDreams = function(){
+//     const ui = new UI;
+//     const dreams = ui.getLocalDreams();
+//     dreams.forEach(function(dream){
 //         const ui = new UI;
 //         ui.addDreamToList(dream);
 //     });
 // }
-// Store.prototype.storeDreams = function(dream){
-//     const store = new Store;
-//     const dreams = store.getStoredDreams();
 
+// //Step 3: Set dreams to local
+// UI.prototype.addLocalDreams = function(dream){
+//     const ui = new UI;
+//     const dreams = ui.getLocalDreams();
 //     dreams.push(dream);
-
 //     localStorage.setItem('dreams', JSON.stringify(dreams));
 // }
-// Store.prototype.removeStoredDreams = function(){
-    
-// }
-
-//first local storafge
-// UI.prototype.setLocalStorage = function(dream){
-        
-//         localStorage.setItem('Jounral Date', `${dream.date}`);
-//         localStorage.setItem('Jounral Time', `${dream.time}`);
-//         localStorage.setItem('Jounral Log', `${dream.log}`);
-
-
-    
-// }
-
-// UI.prototype.getLocalStorage(){
-    
-// }
-
-// UI.prototype.removeLocalStorage = function(){
-//     localStorage.clear();
-// }
+// //Instantiare a new UI so we can check local storage
+// const ui = new UI;
+// ui.displayLocalDreams();
 
 
 
@@ -68,8 +52,8 @@ function UI () {}
 // UI Add Dream
 UI.prototype.addDreamToList = function(dream){  
     const list = document.getElementById('dream-list'),
-    lucidCheck = document.getElementById('Lucid-check'),
-    row = document.createElement('tr');
+        lucidCheck = document.getElementById('Lucid-check'),
+        row = document.createElement('tr');
     if (lucidCheck.checked) {
         row.className = 'lucid-log';
     } 
@@ -118,7 +102,7 @@ UI.prototype.deleteDream = function(target){
         target.parentElement.parentElement.remove();
      }
   }
-  
+
 
 // Event Listener
 
@@ -138,12 +122,15 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
         ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
     } else if(dateValidation.test(date)){
         ui.addDreamToList(dream);
-        // store.storeDreams(dream);
+        ui.addLocalDreams();
         if (lucidCheck.checked) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
+            ui.addLocalDreams(dream);
             ui.clearFields();
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
+            ui.getLocalDreams();
+            ui.addLocalDreams(dream);
             ui.clearFields();
         }
         
