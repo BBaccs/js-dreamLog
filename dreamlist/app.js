@@ -127,7 +127,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
           ui = new UI(),
           store = new Store;
 
-          //Validate then add dream if validation is correct
+    //Validate then add dream if validation is correct
     if (date === '' || time === '' || log === '') {
         ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
     } else if(dateValidation.test(date)){
@@ -135,7 +135,6 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
         store.addLocalDreams(dream);
         if (lucidCheck.checked) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
-            // store.addLocalDreams(dream);
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
         }
