@@ -66,11 +66,12 @@ Store.prototype.getLocalDreams = function(){
 
 //Step 2: Display local Dreams
 Store.prototype.displayLocalDreams = function(){
-    const store = new Store;
-    const dreams = store.getLocalDreams();
+    const store = new Store,
+          ui = new UI,
+          dreams = store.getLocalDreams();
     dreams.forEach(function(dream){
         const store = new Store;
-        store.addDreamToList(dream);
+        ui.addDreamToList(dream);
     });
 }
 
@@ -82,9 +83,20 @@ Store.prototype.addLocalDreams = function(dream){
     localStorage.setItem('dreams', JSON.stringify(dreams));
 }
 
+//Step 4: Remove local dream
+Store.prototype.removeLocalDreams = function(log){
+    const store = new Store;
+    const dreams = store.getLocalDreams();
+    dreams.forEach(function(dream, index) {
+        if (dream.log === log) {
+            dreams.splice(index, 1)            
+        }
+    });
+    localStorage.setItem('dreams', JSON.stringify(dreams));
+}
 
 // UI Add Dream
-Store.prototype.addDreamToList = function(dream){  
+UI.prototype.addDreamToList = function(dream){  
     const list = document.getElementById('dream-list'),
         lucidCheck = document.getElementById('Lucid-check'),
         row = document.createElement('tr');
@@ -119,18 +131,15 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
     if (date === '' || time === '' || log === '') {
         ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
     } else if(dateValidation.test(date)){
-        store.addDreamToList(dream);
+        ui.addDreamToList(dream);
         store.addLocalDreams(dream);
         if (lucidCheck.checked) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
-            store.addLocalDreams(dream);
-            ui.clearFields();
+            // store.addLocalDreams(dream);
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
-            store.addLocalDreams(dream);
-            ui.clearFields();
         }
-        
+        ui.clearFields();
     } else {
         ui.validationAlert('error', 'Error: Date input field can only contain numbers and hyphens');
     }
@@ -139,9 +148,12 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
 
   //Delete button Event Listener
   document.getElementById('dream-list').addEventListener('click', function(e){ 
-    const ui = new UI;
+    const ui = new UI,
+          store = new Store;
     ui.deleteDream(e.target);
     ui.validationAlert('success', 'Dream entry removed');
+    store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);
+    console.log(e.target.parentElement.previousElementSibling.textContent);
     e.preventDefault();
   });
 
