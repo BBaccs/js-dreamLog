@@ -152,7 +152,6 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
     ui.deleteDream(e.target);
     ui.validationAlert('success', 'Dream entry removed');
     store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);
-    console.log(e.target.parentElement.previousElementSibling.textContent);
     e.preventDefault();
   });
 
