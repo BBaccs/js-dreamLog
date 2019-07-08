@@ -1,20 +1,18 @@
 // Dream Constructor
-function Dream (date, time, log) {  
+function Dream (date, time, log, lucidCheck) {  
     this.date = date;
     this.time = time;
     this.log = log;
+    this.lucidCheck = lucidCheck;
   }
-
 
 // UI Constructor
 function UI () {}
-
 
 // Local Storage Constructor
 function Store () {}
 
 //UI Prototypes
-
 // Clear form fields
 UI.prototype.clearFields = function(){
    document.getElementById('Date').value = '';
@@ -52,7 +50,6 @@ UI.prototype.deleteDream = function(target){
 
 
 //Local Storage Prototypes
-
 //Step 1: Check/Get Dreams from LS
 Store.prototype.getLocalDreams = function(){
     let dreams;
@@ -98,9 +95,8 @@ Store.prototype.removeLocalDreams = function(log){
 // UI Add Dream
 UI.prototype.addDreamToList = function(dream){  
     const list = document.getElementById('dream-list'),
-        lucidCheck = document.getElementById('Lucid-check'),
         row = document.createElement('tr');
-    if (lucidCheck.checked) {
+    if (dream.lucidCheck) {
         row.className = 'lucid-log';
     } 
 
@@ -115,15 +111,14 @@ UI.prototype.addDreamToList = function(dream){
 
 
 // Event Listener
-
 //Add dream Event Listener
 document.getElementById('dream-form').addEventListener('submit', function(e){
     const dateValidation = /[0-9]/,
           date = document.getElementById('Date').value,
           time = document.getElementById('Time').value,
           log = document.getElementById('Log').value,
-          lucidCheck = document.getElementById("Lucid-check"),
-          dream = new Dream(date, time, log),
+          lucidCheck = document.getElementById("Lucid-check").checked,
+          dream = new Dream(date, time, log, lucidCheck),
           ui = new UI(),
           store = new Store;
 
@@ -133,7 +128,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
     } else if(dateValidation.test(date)){
         ui.addDreamToList(dream);
         store.addLocalDreams(dream);
-        if (lucidCheck.checked) {
+        if (dream.lucidCheck.checked) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
