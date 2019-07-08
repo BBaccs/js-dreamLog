@@ -132,7 +132,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
         ui.addDreamToList(dream);
         store.addLocalDreams(dream);
         // If lucid dream box is checked, add a special alert, otherwise add the regular alert
-        if (dream.lucidCheck.checked) {
+        if (dream.lucidCheck) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
