@@ -102,9 +102,11 @@ Store.prototype.removeLocalDreams = function(log){
           dreams = store.getLocalDreams();
     dreams.forEach(function(dream, index) {
         if (dream.log === log) {
+            // if the targeted dream log matches a log in local storage, splice the entire dream entry out of the array 
             dreams.splice(index, 1)            
         }
     });
+    // Reset local storage to the dreams array, so that anything that has been removed will no longer exist in LS
     localStorage.setItem('dreams', JSON.stringify(dreams));
 }
 
@@ -116,7 +118,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
     const dateValidation = /^([0-9]{1,2}[\-\/]){2}[0-9]{2,4}$/,
           timeValidation = /^([0-9]{1,2}[\:][0-9]{2})/,
           //checks for a.m. or p.m. at the end of the time
-          nightDayValidation = /[ap].m.$/i
+          nightDayValidation = /[ap].m.$/i,
           // Grab input values, then pass into instantiated dream
           date = document.getElementById('Date').value,
           time = document.getElementById('Time').value,
