@@ -48,6 +48,23 @@ UI.prototype.deleteDream = function(target){
      }
   }
 
+// UI Add Dream
+UI.prototype.addDreamToList = function(dream){  
+    const list = document.getElementById('dream-list'),
+        row = document.createElement('tr');
+    if (dream.lucidCheck) {
+        row.className = 'lucid-log';
+    } 
+
+    row.innerHTML = `
+        <td class="date">${dream.date}</td>
+        <td>${dream.time}</td>
+        <td>${dream.log}</td>
+        <td><a href="#" class="delete">X<a></td>
+    `;
+    list.appendChild(row);
+}
+
 
 //Local Storage Prototypes
 //Step 1: Check/Get Dreams from LS
@@ -92,23 +109,6 @@ Store.prototype.removeLocalDreams = function(log){
     localStorage.setItem('dreams', JSON.stringify(dreams));
 }
 
-// UI Add Dream
-UI.prototype.addDreamToList = function(dream){  
-    const list = document.getElementById('dream-list'),
-        row = document.createElement('tr');
-    if (dream.lucidCheck) {
-        row.className = 'lucid-log';
-    } 
-
-    row.innerHTML = `
-        <td class="date">${dream.date}</td>
-        <td>${dream.time}</td>
-        <td>${dream.log}</td>
-        <td><a href="#" class="delete">X<a></td>
-    `;
-    list.appendChild(row);
-}
-
 
 // Event Listener
 //Add dream Event Listener
@@ -123,7 +123,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
           store = new Store;
 
     //Validate then add dream if validation is correct
-    if (date === '' || time === '' || log === '') {
+    if (dream.date === '' || dream.time === '' || dream.log === '') {
         ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
     } else if(dateValidation.test(date)){
         ui.addDreamToList(dream);
@@ -133,7 +133,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
         }
-        ui.clearFields();
+        ui.clearFields(dream);
     } else {
         ui.validationAlert('error', 'Error: Date input field can only contain numbers and hyphens');
     }
