@@ -22,22 +22,22 @@ UI.prototype.clearFields = function(){
 }
 
 // Insert Success/Error Div 
-UI.prototype.validationAlert = function(className, message){
+UI.prototype.showAlert = function(className, message){
     const container = document.getElementById('dream-form'),
-        validationAlert = document.createElement('div');
-        validationAlert.className = `
+        showAlert = document.createElement('div');
+        showAlert.className = `
             ${className}
         `;
-        validationAlert.appendChild(document.createTextNode(message));
-        container.insertBefore(validationAlert, container.firstChild);
+        showAlert.appendChild(document.createTextNode(message));
+        container.insertBefore(showAlert, container.firstChild);
 
         if (className === 'lucid') {
             setTimeout(function(){
-                container.removeChild(validationAlert);
+                container.removeChild(showAlert);
             }, 8000);
         } else {
             setTimeout(function(){
-                container.removeChild(validationAlert);
+                container.removeChild(showAlert);
             }, 6000);
         }
 }
@@ -128,7 +128,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
 
     // If inputs are empty, throw empty error
     if (dream.date === '' || dream.time === '' || dream.log === '') {
-        ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
+        ui.showAlert('error', 'Error: No input can be left empty...so fill it out');
     } 
     // If all inputs are valid, add dream to UI and LS
     else if(dateValidation.test(date) & timeValidation.test(time) & nightDayValidation.test(time)) {
@@ -136,20 +136,20 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
         store.addLocalDreams(dream);
         // If lucid dream box is checked, add a special alert, otherwise add the regular alert
         if (dream.lucidCheck) {
-            ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
+            ui.showAlert('lucid', 'Impressive, but can you do this Noob?');
         } else {
-            ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
+            ui.showAlert('success', 'Dream successfully logged. Now go to work bum.');
         }
         // clear all fields once we've successfully added the dreams
         ui.clearFields(dream);
     } 
     // If date fails validation, throw date error
     else if (!dateValidation.test(date)) {
-        ui.validationAlert('error', "Error: Date input field must be formated correctly, some acceptable examples are: 11-11-11 and 1/1/1.");
+        ui.showAlert('error', "Error: Date input field must be formated correctly, some acceptable examples are: 11-11-11 and 1/1/1.");
     }
     // Otherwise the Time validation failed, so throw that error
     else {
-        ui.validationAlert('error', "Error: Time input field must be formated correctly, some acceptable examples are: 9:00 A.M. and 08:00p.m.");
+        ui.showAlert('error', "Error: Time input field must be formated correctly, some acceptable examples are: 9:00 A.M. and 08:00p.m.");
     }
     e.preventDefault();
   });
@@ -160,7 +160,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
           store = new Store;
     if (e.target.className === 'delete') {
         ui.deleteDream(e.target);
-        ui.validationAlert('success', 'Dream entry removed');
+        ui.showAlert('success', 'Dream entry removed');
         store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);    
     }
     e.preventDefault();
