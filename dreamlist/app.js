@@ -111,10 +111,12 @@ Store.prototype.removeLocalDreams = function(log){
 // Event Listener
 //Add dream Event Listener
 document.getElementById('dream-form').addEventListener('submit', function(e){
+    // Date/time form validation
     const dateValidation = /^([0-9]{1,2}[\-\/]){2}[0-9]{2,4}$/,
           timeValidation = /^([0-9]{1,2}[\:][0-9]{2})/,
           //checks for a.m. or p.m. at the end of the time
           nightDayValidation = /[ap].m.$/i
+          // Grab input values, then pass into instantiated dream
           date = document.getElementById('Date').value,
           time = document.getElementById('Time').value,
           log = document.getElementById('Log').value,
