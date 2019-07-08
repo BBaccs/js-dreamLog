@@ -71,6 +71,7 @@ Store.prototype.getLocalDreams = function(){
     if (localStorage.getItem('dreams') === null) {
         dreams = [];
     } else {
+        // Parse the JSON string and assign it to dreams array
         dreams = JSON.parse(localStorage.getItem('dreams'));
     }   
     return dreams;
@@ -78,11 +79,10 @@ Store.prototype.getLocalDreams = function(){
 
 //Step 2: Display local Dreams
 Store.prototype.displayLocalDreams = function(){
-    const store = new Store,
+    const store = new Store;
           ui = new UI,
           dreams = store.getLocalDreams();
     dreams.forEach(function(dream){
-        const store = new Store;
         ui.addDreamToList(dream);
     });
 }
@@ -92,6 +92,7 @@ Store.prototype.addLocalDreams = function(dream){
     const store = new Store;
     const dreams = store.getLocalDreams();
     dreams.push(dream);
+    // Convert dreams array into a JSON string so it can be stored in LS
     localStorage.setItem('dreams', JSON.stringify(dreams));
 }
 
