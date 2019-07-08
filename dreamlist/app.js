@@ -38,7 +38,7 @@ UI.prototype.validationAlert = function(className, message){
         } else {
             setTimeout(function(){
                 container.removeChild(validationAlert);
-            }, 3000);
+            }, 6000);
         }
 }
 
@@ -113,7 +113,10 @@ Store.prototype.removeLocalDreams = function(log){
 // Event Listener
 //Add dream Event Listener
 document.getElementById('dream-form').addEventListener('submit', function(e){
-    const dateValidation = /[0-9]/,
+    const dateValidation = /^([0-9]{1,2}[\-\/]){2}[0-9]{2,4}$/,
+          timeValidation = /^([0-9]{1,2}[\:][0-9]{2})/,
+          //checks for a.m. or p.m. at the end of the time
+          nightDayValidation = /[ap].m.$/i
           date = document.getElementById('Date').value,
           time = document.getElementById('Time').value,
           log = document.getElementById('Log').value,
@@ -122,20 +125,30 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
           ui = new UI(),
           store = new Store;
 
-    //Validate then add dream if validation is correct
+    // If inputs are empty, throw empty error
     if (dream.date === '' || dream.time === '' || dream.log === '') {
         ui.validationAlert('error', 'Error: No input can be left empty...so fill it out');
-    } else if(dateValidation.test(date)){
+    } 
+    // If all inputs are valid, add dream to UI and LS
+    else if(dateValidation.test(date) & timeValidation.test(time) & nightDayValidation.test(time)) {
         ui.addDreamToList(dream);
         store.addLocalDreams(dream);
+        // If lucid dream box is checked, add a special alert, otherwise add the regular alert
         if (dream.lucidCheck.checked) {
             ui.validationAlert('lucid', 'Impressive, but can you do this Noob?');
         } else {
             ui.validationAlert('success', 'Dream successfully logged. Now go to work bum.');
         }
+        // clear all fields once we've successfully added the dreams
         ui.clearFields(dream);
-    } else {
-        ui.validationAlert('error', 'Error: Date input field can only contain numbers and hyphens');
+    } 
+    // If date fails validation, throw date error
+    else if (!dateValidation.test(date)) {
+        ui.validationAlert('error', "Error: Date input field must be formated correctly, some acceptable examples are: 11-11-11 and 1/1/1.");
+    }
+    // Otherwise the Time validation failed, so throw that error
+    else {
+        ui.validationAlert('error', "Error: Time input field must be formated correctly, some acceptable examples are: 9:00 A.M. and 08:00p.m.");
     }
     e.preventDefault();
   });
@@ -147,6 +160,8 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
     ui.deleteDream(e.target);
     ui.validationAlert('success', 'Dream entry removed');
     store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);
+    console.log(e.target)
+    console.log(e.target.parentElement.previousElementSibling.textContent)
     e.preventDefault();
   });
 
