@@ -43,9 +43,7 @@ UI.prototype.validationAlert = function(className, message){
 }
 
 UI.prototype.deleteDream = function(target){
-    if (target.className === 'delete') {
         target.parentElement.parentElement.remove();
-     }
   }
 
 // UI Add Dream
@@ -157,9 +155,11 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
   document.getElementById('dream-list').addEventListener('click', function(e){ 
     const ui = new UI,
           store = new Store;
-    ui.deleteDream(e.target);
-    ui.validationAlert('success', 'Dream entry removed');
-    store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);
+    if (e.target.className === 'delete') {
+        ui.deleteDream(e.target);
+        ui.validationAlert('success', 'Dream entry removed');
+        store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);    
+    }
     e.preventDefault();
   });
 
