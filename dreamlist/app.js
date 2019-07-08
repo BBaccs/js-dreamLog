@@ -55,7 +55,7 @@ UI.prototype.addDreamToList = function(dream){
     } 
 
     row.innerHTML = `
-        <td class="date">${dream.date}</td>
+        <td>${dream.date}</td>
         <td>${dream.time}</td>
         <td>${dream.log}</td>
         <td><a href="#" class="delete">X<a></td>
@@ -99,7 +99,7 @@ Store.prototype.addLocalDreams = function(dream){
 //Step 4: Remove local dream
 Store.prototype.removeLocalDreams = function(log){
     const store = new Store;
-    const dreams = store.getLocalDreams();
+          dreams = store.getLocalDreams();
     dreams.forEach(function(dream, index) {
         if (dream.log === log) {
             dreams.splice(index, 1)            
@@ -128,7 +128,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
 
     // If inputs are empty, throw empty error
     if (dream.date === '' || dream.time === '' || dream.log === '') {
-        ui.showAlert('error', 'Error: No input can be left empty...so fill it out');
+        ui.showAlert('error', 'Error: Date, time and log can\'t be left empty...so fill them out!');
     } 
     // If all inputs are valid, add dream to UI and LS
     else if(dateValidation.test(date) & timeValidation.test(time) & nightDayValidation.test(time)) {
@@ -141,7 +141,7 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
             ui.showAlert('success', 'Dream successfully logged. Now go to work bum.');
         }
         // clear all fields once we've successfully added the dreams
-        ui.clearFields(dream);
+        ui.clearFields();
     } 
     // If date fails validation, throw date error
     else if (!dateValidation.test(date)) {
@@ -163,7 +163,6 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
         ui.showAlert('success', 'Dream entry removed');
         store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);    
     }
-    e.preventDefault();
   });
 
 
