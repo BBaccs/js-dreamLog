@@ -1,10 +1,14 @@
 // Dream Constructor
-function Dream (date, time, log, lucidCheck) {  
+function Dream (date, time, log, lucidCheck, id) {  
     this.date = date;
     this.time = time;
     this.log = log;
     this.lucidCheck = lucidCheck;
+    this.id = id;
   }
+
+  // Dreams Array for generating ids
+  const dreamsArray = [];
 
 // UI Constructor
 function UI () {}
@@ -58,7 +62,7 @@ UI.prototype.addDreamToList = function(dream){
         <td>${dream.date}</td>
         <td>${dream.time}</td>
         <td>${dream.log}</td>
-        <td><a href="#" class="delete">X<a></td>
+        <td><a href="#" class="delete" id="${dream.id}">X<a></td>
     `;
     list.appendChild(row);
 }
@@ -101,6 +105,8 @@ Store.prototype.removeLocalDreams = function(log){
     const store = new Store;
           dreams = store.getLocalDreams();
     dreams.forEach(function(dream, index) {
+
+        //Placeholder : here we should use id to do this
         if (dream.log === log) {
             // if the targeted dream log matches a log in local storage, splice the entire dream entry out of the array 
             dreams.splice(index, 1)            
@@ -122,9 +128,20 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
           // Grab input values, then pass into instantiated dream
           date = document.getElementById('Date').value,
           time = document.getElementById('Time').value,
-          log = document.getElementById('Log').value,
+          log = document.getElementById('Log').value;
+    let id;
+
+        // clean this up with a function
+            dreamsArray.push(dreams.id);
+            if(dreamsArray.length > 0) {
+                id = dreamsArray.length - 1;
+            } else {
+                id = 0;
+            }
+
+
           lucidCheck = document.getElementById("Lucid-check").checked,
-          dream = new Dream(date, time, log, lucidCheck),
+          dream = new Dream(date, time, log, lucidCheck, id),
           ui = new UI(),
           store = new Store;
 
