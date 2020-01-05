@@ -4,11 +4,9 @@ function Dream (date, time, log, lucidCheck, id) {
     this.time = time;
     this.log = log;
     this.lucidCheck = lucidCheck;
-    this.id = id;
+    // Grabs dreams.length in LS so we can generate a unique id for each dream log.
+    this.id = Store.prototype.getLocalDreams().length;
   }
-
-  // Dreams Array for generating ids
-  const dreamsArray = [];
 
 // UI Constructor
 function UI () {}
@@ -62,9 +60,25 @@ UI.prototype.addDreamToList = function(dream){
         <td>${dream.date}</td>
         <td>${dream.time}</td>
         <td>${dream.log}</td>
-        <td><a href="#" class="delete" id="${dream.id}">X<a></td>
+        <td><a href="#" class="delete" id="${dream.id}">X</a></td>
     `;
     list.appendChild(row);
+}
+
+/**
+ * Loop through all dream items and update their id to current index
+ */
+const updateIds = function() {
+    // Get the list in DOM
+    const list = document.getElementById('dream-list')   
+    // Get a NodeList of dreams
+    const children = list.childNodes
+    // Loop through children
+    // Find the delete link
+    // and then we set the id to the current index
+    children.forEach((dream, index) => {
+        dream.querySelector('.delete').setAttribute('id', index)
+    })
 }
 
 
@@ -103,17 +117,39 @@ Store.prototype.addLocalDreams = function(dream){
 //Step 4: Remove local dream
 Store.prototype.removeLocalDreams = function(log){
     const store = new Store;
-          dreams = store.getLocalDreams();
-    dreams.forEach(function(dream, index) {
-
+    let dreams = store.getLocalDreams();
+    /*dreams.forEach(function(dream, index) {
         //Placeholder : here we should use id to do this
-        if (dream.log === log) {
+        if (dream.log == log) {
             // if the targeted dream log matches a log in local storage, splice the entire dream entry out of the array 
             dreams.splice(index, 1)            
         }
-    });
+    });*/
+
+    // Filter out items that do not much the log passed
+    // We get a new array without the dream that was deleted
+    dreams = dreams.filter(dream => dream.log != log)
+
+    // We map through all the dreams and update id with an index
+    dreams = dreams.map((dream, index) => {
+        dream.id = index
+        return dream
+    })
+
+
+    /*dreams.forEach(function(dream) {
+        let index = dreams.indexOf(dream);
+        dream.id = dreams[index].id;
+        console.log(dreams, dreams[index].id)
+        return dream.id;
+    });*/
+
+
     // Reset local storage to the dreams array, so that anything that has been removed will no longer exist in LS
     localStorage.setItem('dreams', JSON.stringify(dreams));
+
+    // After deleting a dream we update IDs in the DOM
+    updateIds()
 }
 
 
@@ -128,20 +164,10 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
           // Grab input values, then pass into instantiated dream
           date = document.getElementById('Date').value,
           time = document.getElementById('Time').value,
-          log = document.getElementById('Log').value;
-    let id;
-
-        // clean this up with a function
-            dreamsArray.push(dreams.id);
-            if(dreamsArray.length > 0) {
-                id = dreamsArray.length - 1;
-            } else {
-                id = 0;
-            }
-
-
-          lucidCheck = document.getElementById("Lucid-check").checked,
-          dream = new Dream(date, time, log, lucidCheck, id),
+          log = document.getElementById('Log').value,
+          lucidCheck = document.getElementById("Lucid-check").checked;
+    let   id;
+    const dream = new Dream(date, time, log, lucidCheck, id),
           ui = new UI(),
           store = new Store;
 
@@ -180,7 +206,8 @@ document.getElementById('dream-form').addEventListener('submit', function(e){
     if (e.target.className === 'delete') {
         ui.deleteDream(e.target);
         ui.showAlert('success', 'Dream entry removed');
-        store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);    
+        store.removeLocalDreams(e.target.parentElement.previousElementSibling.textContent);
+        // console.log(dreams.length);   
     }
   });
 
