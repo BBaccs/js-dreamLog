@@ -126,9 +126,9 @@ Store.prototype.removeLocalDreams = function(log){
         }
     });*/
 
-    // Filter out items that do not match the id passed
+    // Filter out items that do not much the log passed
     // We get a new array without the dream that was deleted
-    dreams = dreams.filter(dream => dream.id != id)
+    dreams = dreams.filter(dream => dream.log != log)
 
     // We map through all the dreams and update id with an index
     dreams = dreams.map((dream, index) => {
